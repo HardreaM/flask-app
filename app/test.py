@@ -27,4 +27,5 @@ def test():
     books = cur.fetchall()
     cur.close()
     conn.close()
+    print(books)
     return jsonify(books)
