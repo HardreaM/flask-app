@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>FlaskApp</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        (async () => {
+
+            try {
+            
+               let response = await axios.post('/protected', {}, {
+                   headers: {
+                       Authorization: 'Bearer ' + localStorage.getItem('token')
+                   }
+               })
+               
+               window.location="/redact_table";
+               console.log(response);
+
+        
+            }
+            catch(error) {
+                if (error.message === "Request failed with status code 403") {
+                    window.location="/view_table";
+                };
+                if (error.message === "Request failed with status code 401") {
+                    window.location="/login"
+                }
+            }
+        })()
+    </script>
+</body>
+</html>

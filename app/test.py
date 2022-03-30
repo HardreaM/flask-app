@@ -5,6 +5,7 @@ from flask import Flask
 from flask import jsonify
 from flask import render_template
 from flask import request
+from flask import redirect
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -30,7 +31,10 @@ def get_db_connection():
 
 @app.route('/')
 def hello():
-    return 'Hello, World!'
+    if not get_jwt_identity():
+        access_token = create_access_token(identity='guest')
+        return jsonify(get_jwt_identity())
+    return jsonify(get_jwt_identity())
 
 @app.route('/test')
 def test():
@@ -49,8 +53,8 @@ def login():
 
     if request.method == 'POST':
 
-        username = request.form.get('username')
-        password = request.form.get('password')
+        username = request.json.get('username')
+        password = request.json.get('password')
         conn = get_db_connection()
         cur = conn.cursor()
         query = """SELECT * FROM "USERS" WHERE user_name=%s AND user_password=%s;"""
@@ -66,7 +70,8 @@ def login():
         access_token = create_access_token(identity=username)
         response = jsonify({"msg": "login successful"})
         set_access_cookies(response, access_token)
-        return render_template('login.html', status='Success')
+        
+        return jsonify(status="Success", access_token=access_token)
     
     return render_template('login.html')
 
@@ -99,8 +104,26 @@ def signup():
 
     return render_template('signup.html')
 
-@app.route("/protected", methods=["GET"])
-@jwt_required(optional=True)
+@app.route("/protected", methods=["GET", "POST"])
 def protected():
-    current_user = get_jwt_identity()
-    return jsonify(foo="bar")
+
+    if request.method == 'POST':
+        verify_jwt_in_request()
+        current_user = get_jwt_identity()
+        if current_user:
+            return jsonify(status="Success")
+        return jsonify(status="Forbidden"), 403
+    
+    return render_template('protected.html')
+
+@app.route("/view_table", methods=["GET"])
+def view_table():
+    return render_template('view_table.html')
+
+@app.route("/redact_table", methods=["GET", "POST"])
+def redact_table():
+
+    if request.method == "POST":
+        pass
+
+    return render_template('redact_table.html')

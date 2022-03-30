@@ -6,15 +6,16 @@
     <form method="POST">
     <div><label>Usename: <input type="text" name="username"></label></div>
     <div><label>Password: <input type="text" name="password"></label></div>
-    <input type="submit" value="Submit">
+    <input type="button" value="Submit" id="submit">
 
 
-    <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
         const submitBtn = document.getElementById('submit');
         submitBtn.addEventListener('click', async function(event) {
             try {
-                const response = await axios.post('/login', {
+                // console.log(form.serialize())
+                let response = await axios.post('/login', {
                     username: 'de',
                     password: 'de',
                 }, {
@@ -23,10 +24,23 @@
                     // }
                 })
                 console.log(response)
+
+                if (response.data.status === 'Success') {
+                    localStorage.setItem('token', response.data.access_token);
+
+                    response = await axios.get('/protected', {
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('token')
+                        }
+                    })
+
+                    console.log(response)
+
+                }
             }
             catch(err) {
                 console.error(err);
             }
         });
-    </script> -->
+    </script>
 </body>
