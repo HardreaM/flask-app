@@ -1,11 +1,12 @@
 import json
 import psycopg2
 
-from flask import Flask
+from flask import Flask, make_response
 from flask import jsonify
 from flask import render_template
 from flask import request
 from flask import redirect
+from flask import make_response
 
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -53,8 +54,8 @@ def login():
 
     if request.method == 'POST':
 
-        username = request.json.get('username')
-        password = request.json.get('password')
+        username = request.form.get('username')
+        password = request.form.get('password')
         conn = get_db_connection()
         cur = conn.cursor()
         query = """SELECT * FROM "USERS" WHERE user_name=%s AND user_password=%s;"""
@@ -70,6 +71,11 @@ def login():
         access_token = create_access_token(identity=username)
         response = jsonify({"msg": "login successful"})
         set_access_cookies(response, access_token)
+
+        res = make_response(render_template('login.html', status="Logged in"))
+        res.set_cookie('jwt', access_token, max_age=60*60)
+        
+        return res
         
         return jsonify(status="Success", access_token=access_token)
     
