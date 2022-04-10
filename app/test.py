@@ -76,8 +76,6 @@ def login():
         res.set_cookie('jwt', access_token, max_age=60*60)
         
         return res
-        
-        return jsonify(status="Success", access_token=access_token)
     
     return render_template('login.html')
 
@@ -115,9 +113,11 @@ def protected():
 
     if request.method == 'POST':
         verify_jwt_in_request()
-        current_user = get_jwt_identity()
-        if current_user:
-            return jsonify(status="Success")
+        token = request.headers['Authorization']
+        #data = jwt.decode(token, app.config['SECRET_KEY'])
+        print(token)
+        """if current_user:
+            return jsonify(status="Success")"""
         return jsonify(status="Forbidden"), 403
     
     return render_template('protected.html')
