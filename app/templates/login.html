@@ -17,14 +17,14 @@
             try {
                 // console.log(form.serialize())
                 let response = await axios.post('/login', {
-                    username: 'de',
-                    password: 'de',
+                    username: 'a',
+                    password: 'b',
                 }, {
                     // headers: {
                     //     Authorization: 'Bearer 213123'
                     // }
                 })
-                console.log(response)
+                //console.log(response)
 
                 if (response.data.status === 'Success') {
                     localStorage.setItem('token', response.data.access_token);
@@ -35,7 +35,7 @@
                         }
                     })
 
-                    console.log(response)
+                    //console.log(response)
 
                 }
             }

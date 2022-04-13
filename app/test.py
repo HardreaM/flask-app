@@ -1,5 +1,6 @@
 import json
 import psycopg2
+import jwt
 
 from flask import Flask, make_response
 from flask import jsonify
@@ -37,8 +38,8 @@ def hello():
         return jsonify(get_jwt_identity())
     return jsonify(get_jwt_identity())
 
-@app.route('/test')
-def test():
+@app.route('/get_data')
+def get_data():
 
     conn = get_db_connection()
     cur = conn.cursor()
@@ -46,16 +47,30 @@ def test():
     response = cur.fetchall()
     cur.close()
     conn.close()
+
+    print(response)
+
+    return jsonify(response)
+
+@app.route('/test')
+def test():
+
+    """conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(""SELECT * FROM "USERS";"")
+    response = cur.fetchall()
+    cur.close()
+    conn.close()"""
     
-    return render_template('base.html', data=response)
+    return render_template('test.html')
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
 
     if request.method == 'POST':
 
-        username = request.form.get('username')
-        password = request.form.get('password')
+        username = request.json.get('username')
+        password = request.json.get('password')
         conn = get_db_connection()
         cur = conn.cursor()
         query = """SELECT * FROM "USERS" WHERE user_name=%s AND user_password=%s;"""
@@ -69,13 +84,13 @@ def login():
             return render_template('login.html', status='Wrong data, please try again')
 
         access_token = create_access_token(identity=username)
-        response = jsonify({"msg": "login successful"})
+        response = jsonify({"status": "Success"})
         set_access_cookies(response, access_token)
 
         res = make_response(render_template('login.html', status="Logged in"))
         res.set_cookie('jwt', access_token, max_age=60*60)
         
-        return res
+        return jsonify({"status": "Success", "access_token": access_token})
     
     return render_template('login.html')
 
@@ -115,9 +130,9 @@ def protected():
         verify_jwt_in_request()
         token = request.headers['Authorization']
         #data = jwt.decode(token, app.config['SECRET_KEY'])
-        print(token)
-        """if current_user:
-            return jsonify(status="Success")"""
+        print(get_jwt())
+        if token:
+            return jsonify(status="Success")
         return jsonify(status="Forbidden"), 403
     
     return render_template('protected.html')

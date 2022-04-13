@@ -6,31 +6,17 @@
 </head>
 <body>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <script>
-        (async () => {
-
-            try {
-            
-               let response = await axios.post('/protected', {}, {
-                   headers: {
-                       Authorization: 'Bearer ' + localStorage.getItem('token')
-                   }
-               })
-               
-               window.location="/redact_table";
-               console.log(response);
-
-        
-            }
-            catch(error) {
-                if (error.message === "Request failed with status code 403") {
-                    //window.location="/view_table";
-                };
-                if (error.message === "Request failed with status code 401") {
-                    //window.location="/login"
-                }
-            }
-        })()
-    </script>
+    
+    <div id="app">
+        <p v-if="isAuth">
+            True
+        </p>
+        <p v-else>
+            False
+        </p>
+    </div>
+    
+    <script src="{{ url_for('static', filename='vue.js') }}"></script>
+    <script src="{{ url_for('static', filename='vue_status.js') }}"></script>
 </body>
 </html>
