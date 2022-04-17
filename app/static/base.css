@@ -1,0 +1,11 @@
+#table {
+    display:flex;
+}
+
+#value {
+    width: 10%;
+}
+
+#first {
+    width:5%;
+}

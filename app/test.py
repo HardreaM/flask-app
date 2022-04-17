@@ -41,6 +41,9 @@ def hello():
 @app.route('/get_data')
 def get_data():
 
+    if request.method == 'POST':
+        pass
+
     conn = get_db_connection()
     cur = conn.cursor()
     cur.execute("""SELECT * FROM "USERS";""")
@@ -81,7 +84,7 @@ def login():
 
         if len(response) == 0:
 
-            return render_template('login.html', status='Wrong data, please try again')
+            return 403
 
         access_token = create_access_token(identity=username)
         response = jsonify({"status": "Success"})

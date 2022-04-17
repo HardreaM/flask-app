@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <head>
-
+<link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
 </head>
 <body>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
     <header>TEST</header>
-    <p>TEST</p>
+
     <div id="app">
-        {{isis}}
-        <!-- <div v-for="(row, key) in response" :key="key" :class="key">
-            <p>{{ key }}</p>
-        </div> -->
+        <div v-for="(row, key) in response" :key="key" :class="key" id="table">
+            <div v-for="(element, key) in row" :key="key" :class="key" id="value">
+                <div>
+                    <p>[[ element ]]</p>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <button v-on:click="addData">AddData</button>
 
     <script src="{{ url_for('static', filename='vue.js') }}"></script>
     <script src="{{ url_for('static', filename='test.js') }}"></script>

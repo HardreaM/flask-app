@@ -15,17 +15,11 @@
         const submitBtn = document.getElementById('submit');
         submitBtn.addEventListener('click', async function(event) {
             try {
-                // console.log(form.serialize())
                 let response = await axios.post('/login', {
-                    username: 'a',
-                    password: 'b',
-                }, {
-                    // headers: {
-                    //     Authorization: 'Bearer 213123'
-                    // }
+                    username: document.getElementsByName('username')[0].value,
+                    password: document.getElementsByName('password')[0].value,
                 })
-                //console.log(response)
-
+                
                 if (response.data.status === 'Success') {
                     localStorage.setItem('token', response.data.access_token);
 
@@ -34,8 +28,6 @@
                             Authorization: 'Bearer ' + localStorage.getItem('token')
                         }
                     })
-
-                    //console.log(response)
 
                 }
             }
