@@ -20,14 +20,8 @@
                     password: document.getElementsByName('password')[0].value,
                 })
                 
-                if (response.data.status === 'Success') {
+                if (response.data.status === 200) {
                     localStorage.setItem('token', response.data.access_token);
-
-                    response = await axios.get('/protected', {
-                        headers: {
-                            Authorization: 'Bearer ' + localStorage.getItem('token')
-                        }
-                    })
 
                 }
             }
@@ -36,5 +30,4 @@
             }
         });
     </script>
--->
 </body>

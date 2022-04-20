@@ -2,7 +2,7 @@ import json
 import psycopg2
 import jwt
 
-from flask import Flask, make_response
+from flask import Flask, make_response, send_file
 from flask import jsonify
 from flask import render_template
 from flask import request
@@ -30,13 +30,13 @@ def get_db_connection():
                             password='mypass')
     return conn
 
-
+"""
 @app.route('/')
 def hello():
     if not get_jwt_identity():
         access_token = create_access_token(identity='guest')
         return jsonify(get_jwt_identity())
-    return jsonify(get_jwt_identity())
+    return jsonify(get_jwt_identity())"""
 
 @app.route('/get_data')
 def get_data():
@@ -84,16 +84,11 @@ def login():
 
         if len(response) == 0:
 
-            return 403
+            return 400
 
         access_token = create_access_token(identity=username)
-        response = jsonify({"status": "Success"})
-        set_access_cookies(response, access_token)
-
-        res = make_response(render_template('login.html', status="Logged in"))
-        res.set_cookie('jwt', access_token, max_age=60*60)
         
-        return jsonify({"status": "Success", "access_token": access_token})
+        return jsonify({"access_token": access_token, "success": True, "status": 200})
     
     return render_template('login.html')
 

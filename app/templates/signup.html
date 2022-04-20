@@ -6,5 +6,34 @@
     <form method="POST">
     <div><label>Usename: <input type="text" name="username"></label></div>
     <div><label>Password: <input type="text" name="password"></label></div>
-    <input type="submit" value="Submit">
+    <input type="button" value="Submit" id="submit">
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!--
+    <script>
+        const submitBtn = document.getElementById('submit');
+        submitBtn.addEventListener('click', async function(event) {
+            try {
+                let response = await axios.post('/login', {
+                    username: document.getElementsByName('username')[0].value,
+                    password: document.getElementsByName('password')[0].value,
+                })
+                
+                if (response.data.status === 'Success') {
+                    localStorage.setItem('token', response.data.access_token);
+
+                    response = await axios.get('/protected', {
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('token')
+                        }
+                    })
+
+                }
+            }
+            catch(err) {
+                console.error(err);
+            }
+        });
+    </script>
+-->
 </body>

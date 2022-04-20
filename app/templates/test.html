@@ -10,15 +10,15 @@
 
     <div id="app">
         <div v-for="(row, key) in response" :key="key" :class="key" id="table">
-            <div v-for="(element, key) in row" :key="key" :class="key" id="value">
-                <div>
+            <div v-for="(element, element_key) in row" :key="element_key" :class="key" id="value">
+                <span v-if="checkLength(key)">
                     <p>[[ element ]]</p>
-                </div>
+                    <input type="text">
+                </span>
+                <span v-else><p>[[ element ]]</p></span>
             </div>
         </div>
     </div>
-
-    <button v-on:click="addData">AddData</button>
 
     <script src="{{ url_for('static', filename='vue.js') }}"></script>
     <script src="{{ url_for('static', filename='test.js') }}"></script>

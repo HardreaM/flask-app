@@ -4,6 +4,8 @@ var app = new Vue({
     return {
       isis: false,
       response: {},
+      length: 0,
+      keycodition: false,
     }
   },
   async created() {
@@ -14,10 +16,16 @@ var app = new Vue({
           let response = await axios.get('/get_data', {}, {})
              
           this.response = response.data;
+          this.length = this.response.length - 1;
           },
-      addData() {
-        this.response.push(['5', 'ded', 'net']);
-      },
+      //addData() {
+        //console.log('PUSH');
+        //this.response.push(['5', 'ded', 'net']);
+        //this.length += 1;
+          //},
+      checkLength(key) {
+        return this.length === key
+      }
   },
   computed: {
 
